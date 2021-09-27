@@ -5,6 +5,8 @@ import Cats from "./pages/Cats/Cats";
 import Dogs from "./pages/Dogs/Dogs";
 import Home from "./pages/Home/Home";
 import { ThemeProvider, createTheme, withStyles } from '@material-ui/core';
+import DogBreed from "./components/DogBreed/DogBreed";
+
 
 const theme = createTheme({
   palette: {
@@ -17,26 +19,21 @@ const theme = createTheme({
   }
 });
 
-
-
-
-
-
-
 function App() {
   return (
     <ThemeProvider theme={theme} >
-
-
       <Router>
         <div className="App">
           <Header />
           <Switch>
-            <Route path="/dogs" component={Dogs} />
-            <Route path="/cats">
+            <Route exact path="/dogs" component={Dogs} />
+            <Route path="/dogs/:breed">
+              <DogBreed />
+            </Route>
+            <Route exact path="/cats">
               <Cats />
             </Route>
-            <Route path="/">
+            <Route exact path="/">
               <Home />
             </Route>
           </Switch>

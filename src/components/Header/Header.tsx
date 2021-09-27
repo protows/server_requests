@@ -1,9 +1,18 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { Card } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import shadows from "@material-ui/core/styles/shadows";
 import { NONAME } from "dns";
+import useBreadcrumbs from 'use-react-router-breadcrumbs';
+import styles from "./Header.module.scss";
+
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+} from '@nature-ui/breadcrumb';
+
 
 interface Props { }
 
@@ -25,20 +34,57 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
+
+
+
 const Header = (props: Props) => {
+  const breadcrumbs = useBreadcrumbs();
+
+
+
   const classes = useStyles();
+  const userNamesById = { '1': 'John' };
+
   return (
-    <Card className={classes.root}>
-      <Link className={classes.link} to="/">
-        Home
-      </Link>
-      <Link className={classes.link} to="/dogs">
-        Dogs
-      </Link>
-      <Link className={classes.link} to="/cats">
-        Cats
-      </Link>
-    </Card >
+    <>
+
+
+
+      < Card className={classes.root} >
+
+        <NavLink className={classes.link} to="/">
+          Home
+      </NavLink>
+        <NavLink exact className={classes.link} to="/dogs">
+          Dogs
+      </NavLink>
+        <NavLink className={classes.link} to="/cats">
+          Cats
+      </NavLink>
+      </Card>
+
+      <div className={styles.breadcrumbs_row}>
+        <Breadcrumb separator="/">
+          {breadcrumbs.map(({ breadcrumb, match }) => (
+            <span key={match.url}>
+              {/* <BreadcrumbItem> */}
+              /
+              <BreadcrumbLink href={match.url}>
+
+                {breadcrumb}
+              </BreadcrumbLink>
+
+              {/* </BreadcrumbItem> */}
+
+
+            </span>
+          ))}
+        </Breadcrumb>
+      </div>
+
+    </>
+
+
   );
 };
 
