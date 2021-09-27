@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { getCarsData } from "../../services/cat.service";
 
-
 interface Props { }
 
-
 const Cats = (props: Props) => {
-
-  const [catData, setCatData] = useState<Object[]>([]);
+  const [catData, setCatData] = useState<string[]>([]);
 
   useEffect(() => {
     getCarsData()
@@ -21,37 +18,20 @@ const Cats = (props: Props) => {
         console.error(err);
       });
   }, []);
-  let st: string = "";
 
   const loading = false;
   return (
     <React.Fragment>
       <h4>Render8</h4>
-
       {loading ? (
         <h2>f</h2>
       ) : (
           catData.map((picture) => (
-
-
             < img src={picture} alt="lorem" />
-
-
-
           ))
         )}
-
-
-
-
-
-
-
-
     </React.Fragment >
   );
-  // return <div>Cats page</div>;
-
 }
 
 export default Cats;
