@@ -7,6 +7,10 @@ import styles from "./Dogs.module.scss";
 import { makeStyles } from '@material-ui/core/styles';
 import DogBreed from "../../components/DogBreed/DogBreed";
 import { Route, Switch } from "react-router";
+import DogSearch from "../../components/DogSearch/DogSearch";
+import qs from "qs";
+import { useLocation } from "react-router";
+
 
 
 
@@ -16,6 +20,10 @@ const Dogs = (props: Props) => {
   const classes = useStyles();
   const [breeds, setBreeds] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
+  const [searchText, setSearchText] = useState<string>("");
+  const location = useLocation();
+
+
 
   useEffect(() => {
     setLoading(true);
@@ -31,6 +39,15 @@ const Dogs = (props: Props) => {
       });
   }, []);
 
+  useEffect(() => {
+    const searchParams = qs.parse(location.search.substr(1));
+    if (searchParams.search) {
+      setSearchText(searchParams.search as string);
+    } else {
+      setSearchText("");
+    }
+  }, [location.search]);
+
   return (
     <>
 
@@ -38,6 +55,10 @@ const Dogs = (props: Props) => {
 
 
       <div>
+
+        <div className={classes.dogSearch}>
+          <DogSearch />
+        </div>
         <div className={styles.rocket}>
           {loading ? (
             <Box display="flex" justifyContent="center">
@@ -45,12 +66,13 @@ const Dogs = (props: Props) => {
             </Box>
           ) : (
 
-              breeds.map((breed) => (
-                <Link key={breed} to={`/dogs/${breed}`} className={classes.link}>
+              breeds.filter((breed) => breed.match(new RegExp(searchText, "gi")))
+                .map((breed) => (
+                  <Link key={breed} to={`/dogs/${breed}`} className={classes.link}>
 
-                  - {breed}
-                </Link>
-              ))
+                    - {breed}
+                  </Link>
+                ))
 
             )}
         </div>

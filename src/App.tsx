@@ -6,6 +6,7 @@ import Dogs from "./pages/Dogs/Dogs";
 import Home from "./pages/Home/Home";
 import { ThemeProvider, createTheme, withStyles } from '@material-ui/core';
 import DogBreed from "./components/DogBreed/DogBreed";
+import { useLocation } from "react-router";
 
 
 const theme = createTheme({
@@ -18,6 +19,19 @@ const theme = createTheme({
     }
   }
 });
+
+function NoMatch() {
+  let location = useLocation();
+
+  return (
+    <div>
+      <h3>
+        No match for <code>{location.pathname}</code>
+        <img src="./img/404.jpg" alt="lorem" />
+      </h3>
+    </div>
+  );
+}
 
 function App() {
   return (
@@ -35,6 +49,9 @@ function App() {
             </Route>
             <Route exact path="/">
               <Home />
+            </Route>
+            <Route path="*">
+              <NoMatch />
             </Route>
           </Switch>
         </div>

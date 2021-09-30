@@ -11,6 +11,10 @@ const useStyles = makeStyles((theme) => ({
       color: theme.palette.primary.main,
     },
   },
+  dogSearch: {
+    display: "flex",
+    paddingTop: "12px"
+  }
 
   // li: {
   //   // webkitColumnCount: 3,
