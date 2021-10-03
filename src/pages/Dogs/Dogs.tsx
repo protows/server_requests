@@ -25,6 +25,7 @@ const Dogs = (props: Props) => {
 
 
 
+
   useEffect(() => {
     setLoading(true);
 
@@ -65,15 +66,18 @@ const Dogs = (props: Props) => {
               <CircularProgress />
             </Box>
           ) : (
+              <div className={classes.breeds_table}>
+                {breeds.filter((breed) => breed.match(new RegExp(searchText, "gi")))
+                  .map((breed) => (
+                    <Link key={breed} to={`/dogs/${breed}`} className={classes.link}>
 
-              breeds.filter((breed) => breed.match(new RegExp(searchText, "gi")))
-                .map((breed) => (
-                  <Link key={breed} to={`/dogs/${breed}`} className={classes.link}>
-
-                    - {breed}
-                  </Link>
-                ))
-
+                      - {breed}
+                    </Link>
+                  ))
+                  //
+                }
+              </div>
+              //
             )}
         </div>
 

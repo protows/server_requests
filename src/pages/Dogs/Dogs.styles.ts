@@ -14,6 +14,12 @@ const useStyles = makeStyles((theme) => ({
   dogSearch: {
     display: "flex",
     paddingTop: "12px"
+  },
+  breeds_table: {
+    maxHeight: "60vh",
+    display: "flex",
+    flexDirection: "column",
+    flexWrap: "wrap",
   }
 
   // li: {

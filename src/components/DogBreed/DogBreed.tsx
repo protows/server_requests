@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router";
-import { Button, withStyles } from "@material-ui/core";
+import { Button, CircularProgress, Box } from "@material-ui/core";
 import { purple } from '@material-ui/core/colors';
 import { getPictures } from "../../services/dog_items.service";
 
@@ -13,10 +13,13 @@ interface Params {
 const DogBreed = (props: Props) => {
   const { breed } = useParams<Params>();
   const [dogItemData, setDogItemData] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     getPictures(breed)
       .then((res) => {
+        setLoading(false);
         const { message } = res.data;
         setDogItemData(Object(message));
 
@@ -27,14 +30,15 @@ const DogBreed = (props: Props) => {
       });
   }, []);
 
-  const loading = false;
   return (
     <React.Fragment>
       <h4>Render8</h4>
       {loading ? (
-        <h2>f</h2>
+        <Box display="flex" justifyContent="center">
+          <CircularProgress />
+        </Box>
       ) : (
-          dogItemData.slice(0, 3).map((dogItemDataPicture) => (
+          dogItemData.slice(0, 3).map((dogItemDataPicture, index) => (
             <img src={dogItemDataPicture} alt="lorem" />
           ))
         )}
