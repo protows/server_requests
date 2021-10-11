@@ -12,6 +12,10 @@ import qs from "qs";
 import { useLocation } from "react-router";
 
 
+import { selectDogs } from "../../store/pets/pets.selector";
+import { fetchDogs } from "../../store/pets/pets.slice";
+import { selectLoading } from "../../store/loading/loading.selector";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
 
 interface Props { }
@@ -19,69 +23,29 @@ interface Props { }
 const Dogs = (props: Props) => {
   const classes = useStyles();
   const [breeds, setBreeds] = useState<string[]>([]);
-  const [loading, setLoading] = useState(false);
   const [searchText, setSearchText] = useState<string>("");
   const location = useLocation();
 
-
-
+  const dispatch = useAppDispatch();
+  const dogs = useAppSelector(selectDogs);
+  const loading = useAppSelector(selectLoading);
 
   useEffect(() => {
-    setLoading(true);
-
-    getAllBreeds()
-      .then((res) => {
-        const { message } = res.data;
-        setBreeds(Object.keys(message));
-        setLoading(false);
-      })
-      .catch((err) => {
-        setLoading(false);
-      });
+    dispatch(fetchDogs());
   }, []);
-
-  useEffect(() => {
-    const searchParams = qs.parse(location.search.substr(1));
-    if (searchParams.search) {
-      setSearchText(searchParams.search as string);
-    } else {
-      setSearchText("");
-    }
-  }, [location.search]);
 
   return (
     <>
+      <div className={classes.breeds_table}>
+        {loading[fetchDogs.type] === "PROGRESS" && <CircularProgress />}
+        {loading[fetchDogs.type] === "SUCCESS" &&
+          dogs.map((dog) => (
+            < Link key={dog} to={`/dogs/${dog}`} className={classes.link}>
 
-
-
-
-      <div>
-
-        <div className={classes.dogSearch}>
-          <DogSearch />
-        </div>
-        <div className={styles.rocket}>
-          {loading ? (
-            <Box display="flex" justifyContent="center">
-              <CircularProgress />
-            </Box>
-          ) : (
-              <div className={classes.breeds_table}>
-                {breeds.filter((breed) => breed.match(new RegExp(searchText, "gi")))
-                  .map((breed) => (
-                    <Link key={breed} to={`/dogs/${breed}`} className={classes.link}>
-
-                      - {breed}
-                    </Link>
-                  ))
-                  //
-                }
-              </div>
-              //
-            )}
-        </div>
-
-      </div >
+              - {dog}
+            </Link>
+          ))}
+      </div>
     </>
 
   );

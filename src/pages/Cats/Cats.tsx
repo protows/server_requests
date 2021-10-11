@@ -1,37 +1,65 @@
 import React, { useState, useEffect } from "react";
-import { getCarsData } from "../../services/cat.service";
+import { getCatsData } from "../../services/cat.service";
+
+
+import { selectCats } from "../../store/cats/cats.selector";
+import { fetchCats } from "../../store/cats/cats.slice";
+import { selectLoading } from "../../store/loading/loading.selector";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+
+import { Box, CircularProgress } from "@material-ui/core";
+
+
+
+import useStyles from "./Cats.styles";
+
+
+import { useLocation } from "react-router";
+
+import { Link } from "react-router-dom";
+import catsSaga from "../../store/cats/cats.saga";
+
+
 
 interface Props { }
 
 const Cats = (props: Props) => {
-  const [catData, setCatData] = useState<string[]>([]);
+  const classes = useStyles();
+  const [breeds, setBreeds] = useState<string[]>([]);
+  const [searchText, setSearchText] = useState<string>("");
+  const location = useLocation();
+
+  const dispatch = useAppDispatch();
+  const cats = useAppSelector(selectCats);
+  const loading = useAppSelector(selectLoading);
 
   useEffect(() => {
-    getCarsData()
-      .then((res) => {
-        const { message } = res.data;
-        setCatData(Object(message));
-
-        console.log("go " + catData);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+    dispatch(fetchCats());
   }, []);
 
-  const loading = false;
   return (
-    <React.Fragment>
-      <h4>Render8</h4>
-      {loading ? (
-        <h2>f</h2>
-      ) : (
-          catData.map((picture) => (
-            < img src={picture} alt="lorem" />
+    <>
+      <div className={classes.breeds_table}>
+        {loading[fetchCats.type] === "PROGRESS" && <CircularProgress />}
+        {loading[fetchCats.type] === "SUCCESS" &&
+          cats.map((cat) => (
+
+            < Link key={cat} to={`/cats/${cat}`} className={classes.link}>
+
+              - {cat}
+            </Link>
+
           ))
-        )}
-    </React.Fragment >
+
+
+
+
+
+        }
+      </div>
+    </>
+
   );
-}
+};
 
 export default Cats;

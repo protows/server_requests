@@ -1,5 +1,5 @@
 import axios from "axios";
 
-export const getCarsData = () => {
-  return axios.get("https://dog.ceo/api/breed/hound/afghan/images/random/3");
+export const getCatsData = () => {
+  return axios.get("https://api.thecatapi.com/v1/breeds?limit=25");
 };
